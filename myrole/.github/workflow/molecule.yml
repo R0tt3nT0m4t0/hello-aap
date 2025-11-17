@@ -1,0 +1,57 @@
+---
+name: Ansible Molecule
+
+on:
+  push:
+    tags_ignore:
+      - '*'
+    pull_request:
+    schedule:
+      - cron: '39 20 20 * *'
+
+jobs:
+
+  lint:
+    runs-on: ubuntu
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          path: "{{ github.repository }}"
+      - name: Molecule
+        uses: robertdebock/molecule-action@2.6.16
+        with:
+          command: lint
+
+test:
+  needs:
+    - lint
+  runs-on: ubuntu
+  strategy:
+    fail-fast: false
+    matrix:
+      config:
+        - image: "amazonlinux"
+          tag: "latest"
+        - image: "fedora"
+          tag: "latest"
+        - image: "ubuntu"
+          tag: "latest"
+  
+steps:
+
+  - name: Checkout
+    uses: actions/checkout@v2
+    with:
+      path: "{{ github.repository }}"
+
+  - name: disable apparmor for mysql
+    run: sudo ln -s /etc/apparmor.d/usr.bin.mysql /etc/apparmor.d/disable/
+
+  - name: Molecule
+    uses: robertdebock/molecule-action@2.6.16
+    with:
+      image: "{{ matrix.image }}"
+      tag: "{{ matrix.tag }}"
+      command: test
+      

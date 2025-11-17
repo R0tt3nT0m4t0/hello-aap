@@ -1,0 +1,6 @@
+---
+- name: Ensure htop package is installed
+  ansible.builtin.package:
+    name: htop
+    state: present
+...

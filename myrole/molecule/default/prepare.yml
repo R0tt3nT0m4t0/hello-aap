@@ -1,0 +1,11 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: true
+  become: true
+
+  tasks:
+
+    - name: Ensure Python 3
+      ansible.builtin.raw: dnf install -y python3
+      changed_when: true

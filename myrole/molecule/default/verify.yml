@@ -1,0 +1,18 @@
+---
+- name: Verify that the htop package is installed
+  hosts: all
+  gather_facts: false
+
+  tasks:
+
+    - name: Check if htop executable exists
+      ansible.builtin.stat:
+        path: /usr/bin/htop # Common path for htop
+      register: htop_stat
+
+    - name: Fail if htop is not installed
+      ansible.builtin.assert:
+        that:
+          - htop_stat.stat.exists is true
+        fail_msg: "Verification failed: htop was not installed on {{ inventory_hostname }}"
+...

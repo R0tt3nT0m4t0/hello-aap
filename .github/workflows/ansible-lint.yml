@@ -1,0 +1,26 @@
+name: Ansible Lint Check
+
+# Define triggers: The workflow runs on push and pull requests targeting the main branches.
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  lint:
+    name: Run Ansible Lint
+    runs-on: ubuntu-latest
+    steps:
+      
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Ansible Lint
+        uses: ansible-community/ansible-lint-action@v6.7.0
+        # Note: This action automatically discovers and uses .ansible-lint 
+        # files placed in the project root for custom rules.

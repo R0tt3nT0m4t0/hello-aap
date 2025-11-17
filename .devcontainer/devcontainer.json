@@ -1,0 +1,65 @@
+{
+    "name": "Ansible Development",
+    "image": "mcr.microsoft.com/devcontainers/base:fedora",
+
+    "workspaceMount": "source=${localWorkspaceFolder},target=/home/ansible/project,type=bind,consistency=cached",
+    "workspaceFolder": "/home/ansible/project",
+
+    "runArgs": ["--init"],
+    "shutdownAction": "none",
+    "updateRemoteUserID": "false",
+
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installZsh": "false",
+            "username": "ansible",
+            "userUid": "1000",
+            "userGid": "1000"
+        }
+    },
+
+    "postCreateCommand": "dnf upgrade -y && dnf install -y python3-pip python3-devel gcc libffi-devel openssl-devel redhat-rpm-config krb5-devel git sudo make rsync sshpass gawk vim tree awk ansible tar && dnf clean all && python3 -m pip install --no-cache-dir --upgrade pip && runuser -l ansible -c 'python3 -m pip install --no-cache-dir --no-warn-script-location wheel ansible ansible-navigator ansible-lint ansible-runner \"molecule[lint,podman,docker]\" yamllint ansible-builder && ansible-galaxy collection install community.general && ansible-galaxy collection install ansible.posix'",
+
+    "remoteUser": "ansible",
+    "otherPortsAttributes": { "onAutoForward" : "silent" },
+    "postStartCommand": "git config --global core.autocrlf input; git config --global --unset http.sslbackend; git config --global --add http.sslVerify false",
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "redhat.ansible",
+                "redhat.vscode-yaml",
+                "ms-python.python",
+                "ms-python.debugpy",
+                "ms-python.vscode-pylance",
+                "ms-python.vscode-python-envs",
+                "ms-azuretools.vscode-containers",
+                "ms-vscode-remote.remote-containers",
+                "ms-vscode-remote.remote-ssh",
+                "ms-vscode-remote.remote-ssh-edit",
+                "ms-vscode-remote.remote-explorer",
+                "alefragnani.project-manager",
+                "eamodio.gitlens",
+                "esbenp.prettier-vscode",
+                "github.vscode-github-actions",
+                "gruntfuggly.todo-tree",
+                "henriiik.docker-linter",
+                "ipierre1.ansible-vault-vscode",
+                "mhutchie.git-graph",
+                "samuelcolvin.jinjahtml",
+                "trunk.io",
+                "wholroyd.jinja",
+                "vscodevim.vim"
+            ],
+           "settings": {
+               "ansibleLint.path": "/usr/bin/ansible-lint",
+               "python.defaultInterpreterPath": "/usr/bin/python3",
+               "ansible.python.interpreterPath": "/usr/bin/python3",
+               "files.associations": {
+                  "*.yml": "ansible",
+                  "*.yaml": "ansible"
+               }
+           }
+        }
+    }
+}
