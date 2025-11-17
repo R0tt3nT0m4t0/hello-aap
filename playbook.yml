@@ -1,8 +1,8 @@
 ---
-- name: Setting up an apache server and website
+- name: setting up an apache server and website
   hosts: all
-  gather_facts: true
-  become: false
+  gather_facts: yes
+  become: no
 
   vars:
     author: "Juan Medina"
@@ -15,7 +15,7 @@
   pre_tasks:
 
     - name: Assert 'environment_cli' is set and valid
-      ansible.builtin.assert:
+      assert:
         that:
           - environment is defined
           - environment in allowed_environments
@@ -43,15 +43,15 @@
       loop:
         - http
         - https
-
+    
   tasks:
 
     - name: Install HTTPD
-      ansible.builtin.dnf:
+      dnf:
         name: httpd
         state: latest
       notify: Start HTTPD
-
+    
     - name: Insert the author and email to the index.html
       ansible.builtin.template:
         src: index.html.j2
@@ -61,13 +61,17 @@
   handlers:
 
     - name: Start HTTPD
-      ansible.builtin.service:
+      service:
         name: httpd
         state: started
         enabled: true
 
     - name: Restart HTTPD
-      ansible.builtin.service:
+      service:
         name: httpd
         state: reloaded
 ...
+
+
+
+
