@@ -54,3 +54,4 @@ visualstudioexptteam.vscodeintellicode-completions
 vscodevim.vim
 wholroyd.jinja
 zainchen.json
+xadillax.viml
